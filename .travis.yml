@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t vladimir44/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run vladimir44/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t vladimir44/multi-client ./client
+  - docker build -t vladimir44/multi-nginx ./nginx
+  - docker build -t vladimir44/multi-server ./server
+  - docker build -t vladimir44/multi-worker ./worker
+  # login to the docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # take image and push to dockerhub
+  - docker push vladimir44/multi-client
+  - docker push vladimir44/multi-nginx
+  - docker push vladimir44/multi-server
+  - docker push vladimir44/multi-worker
+
+
