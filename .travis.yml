@@ -22,4 +22,17 @@ after_success:
   - docker push vladimir44/multi-server
   - docker push vladimir44/multi-worker
 
+deploy:
+  provider: elasticbeanstalk
+  region: sa-east-1
+  app: multi-docker
+  env: MultiDocker-env-1
+  bucket_name: elasticbeanstalk-sa-east-1-181410295797
+  bucket_path: multi-docker
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: $AWS_SECRET_KEY
+
 
