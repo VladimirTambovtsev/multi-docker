@@ -1,14 +1,8 @@
-# create base image
-FROM node:alpine
-
+FROM node:alpine as builder
 WORKDIR '/app'
-
-# install dependencies
 COPY ./package.json ./
-RUN npm install 
-COPY . . 
-
-# build
+RUN npm install
+COPY . .
 RUN npm run build
 
 FROM nginx
